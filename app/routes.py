@@ -112,3 +112,61 @@ def login_page():
 def logout():
     logout_user()
     return redirect(url_for('login_page'))
+
+@app.route("/manage_collection", methods=["GET", "POST"])
+@login_required
+def manage_collection():
+    user_collection = current_user.pokemon_collection
+
+    if request.method == "POST":
+        action = request.form.get('action')
+        pokemon_id = request.form.get('pokemon_id')
+
+        if action == 'add' and len(user_collection) < 5:
+            selected_pokemon = Pokemon.query.get(pokemon_id)
+
+            if selected_pokemon not in user_collection:
+                current_user.pokemon_collection.append(selected_pokemon)
+                db.session.commit()
+                flash("Pokemon added to your collection!", 'success')
+            else:
+                flash("You already have this Pokemon in your collection!", 'info')
+
+        elif action == 'remove':
+            pokemon_to_remove = Pokemon.query.get(pokemon_id)
+
+            if pokemon_to_remove in user_collection:
+                current_user.pokemon_collection.remove(pokemon_to_remove)
+                db.session.commit()
+                flash("Pokemon removed from your collection!", 'success')
+            else:
+                flash("You don't have this Pokemon in your collection!", 'info')
+
+    return render_template('manage_collection.html', user_collection=user_collection)
+
+@app.route("/attack_users", methods=["GET", "POST"])
+@login_required
+def attack_users():
+    other_users = User.query.filter(User.id != current_user.id).all()
+
+    return render_template('attack_users.html', other_users=other_users)
+
+@app.route("/attack/<int:user_id>", methods=["GET", "POST"])
+@login_required
+def attack_user(user_id):
+    opponent = User.query.get(user_id)
+
+    if request.method == "POST":
+        # Assuming a simple logic for determining the winner based on random chance
+        import random
+        if random.random() < 0.5:  # 50% chance of winning
+            winner = current_user
+        else:
+            winner = opponent
+
+        current_user.wins += 1 if winner == current_user else 0
+        current_user.losses += 1 if winner == opponent else 0
+        db.session.commit()
+        flash("Attack completed! You " + ("won!" if winner == current_user else "lost!"), 'info')
+
+    return render_template('attack_user.html', user=current_user, opponent=opponent, winner=winner)

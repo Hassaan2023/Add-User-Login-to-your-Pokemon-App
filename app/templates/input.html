@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  
+<h1>Pick your Pokemon</h1>
+
+<form action="/input" method="POST"> 
+{{ form.hidden_tag() }}
+{{ form.pokemon() }}
+{{ form.submit()  }}
+</form>
+
+
+{% if pokemon     %}
+<img src="{{ pokemon.front_shiny  }}" alt="">
+<p>{{  pokemon.pokemon_name  }}</p>
+<p>{{  pokemon.ability_name  }}</p>
+
+{% endif  %}
+
+{% endblock %}

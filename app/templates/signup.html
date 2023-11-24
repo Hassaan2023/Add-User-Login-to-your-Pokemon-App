@@ -1,23 +1,49 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <h1>Signup page</h1>
-    <div class="container col-4 border mt-5">
-    <h1></h1>Sign Up Page</h1> 
-    <form method= "POST" action="/signup">
-    {{ form.hidden_tag() }}
-    {{ form.username. label(class='form-label') }}
-    {{ form.username (class='form-control', placeholder= 'Username') }}
-
-    {{ form.email.label (class='form-label') }} 
-    {{ form.email(class='form-control', placeholder= 'Email') }}
-    {{ form.password. label(class='form-label') }} 
-    {{ form.password(class='form-control', placeholder= 'Password') }}
-    {{ form.confirm_password.label(class='form-label') }}
-    {{ form.confirm_password(class='form-control', placeholder= 'Confirm Password') }}
-    <div class="d-grid gap-2 my-3"></div>
-    {{ form.submit(class='btn btn-primary') }} 
+    <div class="text-center">
+        <h1 class="fw-bold text-uppercase yellow-text">Sign Up Page</h1>
     </div>
-</form>
-</div>
+
+    <div class="container col-3 border mt-5" style="background-color: black; color: white; padding: 20px;">
+        <form method="POST" action="/signup">
+            {{ form.hidden_tag() }}
+
+            <div class="mb-3 text-center">
+                {{ form.username.label(class='form-label fw-bold text-uppercase') }}
+                {{ form.username(id='username', class='form-control', autocomplete='username') }}
+            </div>
+
+            <div class="mb-3 text-center">
+                {{ form.email.label(class='form-label fw-bold text-uppercase') }}
+                {{ form.email(id='email', class='form-control', autocomplete='email') }}
+            </div>
+
+            <div class="mb-3 text-center">
+                {{ form.password.label(class='form-label fw-bold text-uppercase') }}
+                {{ form.password(id='password', class='form-control', autocomplete='new-password') }}
+            </div>
+
+            <div class="mb-3 text-center">
+                {{ form.confirm_password.label(class='form-label fw-bold text-uppercase') }}
+                {{ form.confirm_password(id='confirm_password', class='form-control', autocomplete='new-password') }}
+            </div>
+
+            <div class="d-grid gap-2 my-3">
+                {{ form.submit(class='btn btn-primary') }}
+            </div>
+        </form>
+    </div>
+
+    <style>
+        /* Your custom CSS for index.html goes here */
+        .yellow-text {
+            color: rgb(255, 255, 0); /* Set the color of the h1 heading to yellow */
+        }
+    </style>
+    
 {% endblock %}
+
+
+
+
